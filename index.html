@@ -7,11 +7,10 @@
     <title>Milky Way</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet"> <!-- Thêm font Roboto -->
     <style>
-        /* Đoạn mã CSS đã chỉnh sửa ở trên */
         body {
             margin: 0;
             background-color: #160016;
-            font-family: 'Roboto', sans-serif; /* Sử dụng font Roboto cho toàn bộ trang */
+            font-family: 'Roboto', sans-serif;
             overflow-x: hidden;
         }
 
@@ -32,7 +31,8 @@
             white-space: nowrap;
             color: #ffb3c6;
             -webkit-text-stroke: 0.1vh #fb6f92;
-            animation: moveText 20s linear infinite; /* Văn bản chạy ngay lập tức */
+            display: inline-block;
+            animation: moveText 16s linear infinite; /* Văn bản chạy liên tục */
         }
 
         @keyframes moveText {
@@ -115,7 +115,7 @@
             blending: THREE.AdditiveBlending,
             onBeforeCompile: shader => {
                 shader.uniforms.time = gu.time;
-                shader.vertexShader = `
+                shader.vertexShader = ` 
       uniform float time;
       attribute float sizes;
       attribute vec4 shift;
@@ -129,8 +129,7 @@
                     `#include <color_vertex>
         float d = length(abs(position) / vec3(40., 10., 40));
         d = clamp(d, 0., 1.);
-        vColor = mix(vec3(227., 155., 0.), vec3(100., 50., 255.), d) / 255.;
-      `
+        vColor = mix(vec3(227., 155., 0.), vec3(100., 50., 255.), d) / 255.;`
                 ).replace(
                     `#include <begin_vertex>`,
                     `#include <begin_vertex>
@@ -140,7 +139,6 @@
         transformed += vec3(cos(moveS) * sin(moveT), cos(moveT), sin(moveS) * sin(moveT)) * shift.a;
       `
                 );
-                console.log(shader.vertexShader);
                 shader.fragmentShader = `
       varying vec3 vColor;
       ${shader.fragmentShader}
@@ -148,19 +146,16 @@
                     `#include <clipping_planes_fragment>`,
                     `#include <clipping_planes_fragment>
         float d = length(gl_PointCoord.xy - 0.5);
-        //if (d > 0.5) discard;
-      `
-                ).replace(
+      `).replace(
                     `vec4 diffuseColor = vec4( diffuse, opacity );`,
-                    `vec4 diffuseColor = vec4( vColor, smoothstep(0.5, 0.1, d)/* * 0.5 + 0.5*/ );`
+                    `vec4 diffuseColor = vec4( vColor, smoothstep(0.5, 0.1, d) );`
                 );
-                console.log(shader.fragmentShader);
             }
         });
         let p = new THREE.Points(g, m);
         p.rotation.order = "ZYX";
         p.rotation.z = 0.2;
-        scene.add(p)
+        scene.add(p);
 
         let clock = new THREE.Clock();
 
