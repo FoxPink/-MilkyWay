@@ -26,6 +26,14 @@
             z-index: 10;
         }
 
+        #panda {
+            position: fixed;
+            width: 100px; /* Kích thước ảnh GIF */
+            height: auto;
+            display: none; /* Ẩn ảnh GIF khi chưa xuất hiện */
+            z-index: 10; /* Đảm bảo ảnh GIF xuất hiện trên cùng */
+        }
+
         #running-text {
             font-size: 1.5rem;
             white-space: nowrap;
@@ -53,6 +61,8 @@
             Chào Cheang  -  Đây là thế giới của bọn anh  -  Hello Cheang ngố nhé  -  Luôn nở nụ cười thật tươi để vui vẻ mỗi ngày nhé !
         </div>
     </div>
+
+    <img id="panda" src="panda-6260.gif" alt="Panda GIF">
 
     <script type="module">
         import * as THREE from "https://cdn.skypack.dev/three@0.136.0";
@@ -167,5 +177,6 @@
             renderer.render(scene, camera);
         });
     </script>
+    <script src="main.js"></script>
 </body>
 </html>
